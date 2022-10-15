@@ -1,0 +1,9 @@
+rottenpotatoes/.bundle/
+rottenpotatoes/db/*.sqlite3
+rottenpotatoes/log/
+rottenpotatoes/tmp/
+rottenpotatoes/vendor/bundle
+
+rottenpotatoes/Dockerfile
+rottenpotatoes/Dockerfile-web
+rottenpotatoes/docker-compose.yaml

@@ -25,14 +25,39 @@ end
 #  "When I uncheck the following ratings: PG, G, R"
 #  "When I check the following ratings: G"
 
+When /I check the "(.*)"/ do |rating|
+  check("ratings[#{rating}]")
+end
+
 When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   # HINT: use String#split to split up the rating_list, then
   #   iterate over the ratings and reuse the "When I check..." or
   #   "When I uncheck..." steps in lines 89-95 of web_steps.rb
-  fail "Unimplemented"
+  ratings = rating_list.split(', ')
+  ratings.each do |rating|
+    uncheck ? uncheck("ratings[#{rating}]") : (check("ratings[#{rating}]"))
+  end
 end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  fail "Unimplemented"
+  Movie.all.each do |movie|
+    page.should have_content(movie.title)
+  end
+end
+
+Then /^I should (not )?see the following movies: (.*)$/ do |no, movie_list|
+  # Take a look at web_steps.rb Then /^(?:|I )should see "([^"]*)"$/
+  movies = movie_list.split(', ')
+  movies.each do |movie|
+    if no.nil?
+      if page.respond_to? :should
+        page.should have_content(text)
+      else
+        assert page.has_content?(text)
+      end
+    else
+      step %(I should not see "#{movie}")
+    end
+  end
 end

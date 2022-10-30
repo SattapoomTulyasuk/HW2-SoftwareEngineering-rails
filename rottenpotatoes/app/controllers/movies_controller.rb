@@ -30,7 +30,9 @@ class MoviesController < ApplicationController
   end
 
   def new
-    # default: render 'new' template
+    @title_name = params[:title]
+    @desc = params[:overview]
+    puts '================================================='
   end
 
   def create
@@ -55,6 +57,31 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+
+  def search_tmdb
+
+    api_key = "45b8f2a24416e159871bef83285e8107"
+    url = URI("https://api.themoviedb.org/3/search/movie?api_key=#{api_key}&query=#{params[:search_terms]}&page=1")
+    response = Net::HTTP.get_response(url)
+    if response.is_a?(Net::HTTPSuccess)
+      data = JSON.parse(response.body)
+      # puts "THIS ---------------------- #{data["results"]}"
+      if data["results"] == []
+        flash[:warning] = "'#{params[:search_terms]}' was not found in TMDb."
+        redirect_to movies_path   
+      else
+        @title_name = data["results"][0]["title"]
+        @overview = data["results"][0]["overview"]
+
+        @movies = {
+          "title" => "#{@title_name}",
+          "overview" => "#{@overview}"
+        }
+        redirect_to new_movie_path(@movies)        
+      end
+
+    end 
   end
 
 end

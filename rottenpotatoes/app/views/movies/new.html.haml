@@ -1,14 +1,19 @@
 %h2 Create New Movie
 
+- if @title_name
+  %h6 #{@title_name} found it TMDb.
 = form_tag movies_path do
-
   = label :movie, :title, 'Title'
-  = text_field :movie, 'title'
-
+  = text_field :movie, 'title',:value => @title_name
+  %br
+  = label :movie, :description, 'description'  
+  %br
+  = text_area :movie, 'description',:value => @desc  
+  %br
   = label :movie, :rating, 'Rating'
   = select :movie, :rating, ['G','PG','PG-13','R','NC-17']
 
   = label :movie, :release_date, 'Released On'
   = date_select :movie, :release_date
-
+  %br
   = submit_tag 'Save Changes', :class => 'btn btn-primary'

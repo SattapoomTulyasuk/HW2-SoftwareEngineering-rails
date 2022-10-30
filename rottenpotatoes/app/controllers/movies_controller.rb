@@ -1,5 +1,8 @@
 class MoviesController < ApplicationController
 
+  include ApplicationHelper
+  before_action :require_login
+
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -82,6 +85,14 @@ class MoviesController < ApplicationController
       end
 
     end 
+  end
+
+  private
+
+  def require_login
+    unless logged_in?
+      redirect_to root_path
+    end
   end
 
 end

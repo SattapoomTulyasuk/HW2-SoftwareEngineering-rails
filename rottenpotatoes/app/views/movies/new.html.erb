@@ -1,0 +1,26 @@
+<h2>Create New Movie</h2>
+<% if session[:username] %>
+    Using Facebook Account <strong><%= session[:username] %></strong>!
+    <%= link_to "Sign out", signout_path, id: "sign_out" %>
+  <% else %>
+    <p>Your must Sign In to Create</p>
+    <%= link_to "Sign in with Facebook", "/auth/facebook", id: "sign_in" %>
+  <% end %>
+<% if @title_name %>
+  <h6>#{@title_name} found it TMDb.</h6>
+<% end %>
+<%= form_tag movies_path do %>
+  <%= label :movie, :title, 'Title' %>
+  <%= text_field :movie, 'title',:value => @title_name %>
+  <br/>
+  <%= label :movie, :description, 'description'   %>
+  <br/>
+  <%= text_area :movie, 'description',:value => @desc   %>
+  <br/>
+  <%= label :movie, :rating, 'Rating' %>
+  <%= select :movie, :rating, ['G','PG','PG-13','R','NC-17'] %>
+  <%= label :movie, :release_date, 'Released On' %>
+  <%= date_select :movie, :release_date %>
+  <br/>
+  <%= submit_tag 'Save Changes', :class => 'btn btn-primary' %>
+<% end %>

@@ -1,0 +1,2 @@
+module LoginfbHelper
+end

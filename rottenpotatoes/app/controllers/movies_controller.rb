@@ -30,18 +30,32 @@ class MoviesController < ApplicationController
   end
 
   def new
+    if !session[:username]
+      redirect_to root_url
+      flash[:warning] = "Sign In With Facebook to Continue"
+    end
     @title_name = params[:title]
     @desc = params[:overview]
     puts '================================================='
   end
 
   def create
-    @movie = Movie.create!(params[:movie])
-    flash[:notice] = "#{@movie.title} was successfully created."
-    redirect_to movies_path
+    if !session[:username]
+      redirect_to root_url
+      flash[:warning] = "Sign In With Facebook to Continue"
+    else
+      @movie = Movie.create!(params[:movie])
+      flash[:notice] = "#{@movie.title} was successfully created."
+      redirect_to movies_path
+    end
+    
   end
 
   def edit
+    if !session[:username]
+      redirect_to root_url
+      flash[:warning] = "Sign In With Facebook to Continue"
+    end
     @movie = Movie.find params[:id]
   end
 
@@ -53,10 +67,16 @@ class MoviesController < ApplicationController
   end
 
   def destroy
-    @movie = Movie.find(params[:id])
-    @movie.destroy
-    flash[:notice] = "Movie '#{@movie.title}' deleted."
-    redirect_to movies_path
+    if !session[:username]
+      redirect_to root_url
+      flash[:warning] = "Sign In With Facebook to Continue"
+    else
+      @movie = Movie.find(params[:id])
+      @movie.destroy
+      flash[:notice] = "Movie '#{@movie.title}' deleted."
+      redirect_to movies_path
+    end
+    
   end
 
   def search_tmdb

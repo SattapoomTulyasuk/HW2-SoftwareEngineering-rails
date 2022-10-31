@@ -1,4 +1,4 @@
-<h1>Welcome Page!</h1>
+<h1>Welcome <%= User.find_by(id: session[:user_id]).username %> !</h1>
 
 <%= button_to 'Go to App', movies_path %>
 <%= button_to 'Logout', logout_path %>

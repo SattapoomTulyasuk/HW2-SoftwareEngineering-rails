@@ -5,6 +5,8 @@ Rottenpotatoes::Application.routes.draw do
   post '/login', to: 'sessions#create'
   post '/logout', to: 'sessions#destroy'
 
+  get '/auth/:provider/callback', to: 'sessions#omniauth'
+
   resources :users, :movies
   # map '/' to be a redirect to '/movies'
   root :to => 'application#welcome'
